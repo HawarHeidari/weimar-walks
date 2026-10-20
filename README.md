@@ -1,8 +1,18 @@
-# How far can you walk? Central Weimar
+# Weimar walks
 
-A 3D map of central Weimar showing how far you can walk in 5, 10 and 15 minutes from any point, and roughly how many people live in each of those areas.
+A walking route planner on a dark, Bauhaus-styled 3D map of central Weimar. Tell it who is coming, when, for how long, where you start and end, and what you are in the mood for; it plans a route through the city's sights that fits your time and budget, checks the weather for those hours, and plays the walk back as a time-lapse.
 
-Buildings are drawn to their measured height and coloured by their main use; the legend names each colour. Click on the ground and the app walks along the pedestrian network from there. It draws three nested areas in three shades of one colour, highlights the buildings that touch each area in the same shade, and shows in a panel how many buildings each area reaches and about how many residents live in it. Drag to orbit, right-drag to pan, and scroll to zoom.
+**Live:** https://hawarheidari.github.io/weimar-walks/
+
+## Using it
+
+1. **Group, time and place.** Count the visitors (Bauhaus students, other students, adults), pick the date, start time and duration, and choose a start and an end point: a station, a bus stop, a landmark, or **📍 Choose on map** to click any spot near a street. A budget for the whole group is optional. Below the time fields, an hourly weather bar shows the forecast from 08:00 to 20:00; click an hour to start then.
+2. **Vibe and must-sees.** Pick a vibe (Classic, Modern, Nature or Surprise me), up to two must-sees, and if you like a street preference: **Direct**, **Sun** or **Cover** (shade, or building facades when it rains). The forecast marks the one that suits the day.
+3. **Generate.** Depending on the weather you may get one or two short questions with picture cards (rain route or sheltered route, sun or shade, keep the order or move outdoor visits into the good hours), a warning if a must-see is a long walk from its bus stop in extreme weather, and an offer to fit in an outdoor place during a dry hour on a rainy day.
+4. **The map.** The route is drawn in yellow with numbered stops; the city around it fades and the route's landmarks glow. At the bottom, a time slider plays the walk: Fiona walks the route and waits at each stop for its visit time. **Bird's eye** shows the whole route from above; **Observer** follows Fiona from behind and turns with her. Rain falls on the map only in the hours the forecast has rain, as heavily as it says.
+5. **More.** **Itinerary** lists the stops with times, costs and what your weather answers changed; **Edit route** opens the wizard again with your choices; **Walk reach** is the older tool that shows how far you can walk in 5, 10 and 15 minutes from any point.
+
+Keys on the map: ← and → move the time 5 minutes (with Shift 15), Space plays and pauses, Home and End jump to the start and end. Drag to orbit, right-drag to pan, scroll to zoom.
 
 ## Run it
 
@@ -13,41 +23,81 @@ npm run dev     start the app at http://localhost:5173
 
 `npm run build` makes the site in `dist/`. Every push to `main` publishes it at `https://<user>.github.io/<repo>/` through `.github/workflows/deploy.yml`.
 
-## Method
+### Test weathers
 
-- **Start.** The walk starts at the node of the pedestrian network (`streets.graph.json`) nearest to the click. If you click on a building, the walk starts from that spot on the building. If no walkable street is within 100 m of the click, the app says so and doesn't walk.
-- **Walking.** You walk at 4.8 km/h, which is 80 m a minute, so you cover 400 m in 5 minutes, 800 m in 10 and 1,200 m in 15. Distances along the network use each edge's `length` in metres, and every edge can be walked in both directions. The app finds the shortest walk to every junction.
-- **The areas.** Each area is the streets you reach in that time, including the part of the last street you get into before the time runs out. It has a band of 25 m on each side and round ends, and everything is joined into one shape. It isn't a circle or a convex hull.
-- **Buildings.** A building counts for an area when its footprint touches the area, which means it lies within 25 m of a reached street. A building gets the shade of the smallest area it touches. The count for 10 minutes includes the buildings of the 5-minute area, and so on.
-- **Shops within 5 minutes.** The panel lists the buildings in the 5-minute area that have any shop floor area (`retail` in `floor_area_m2`), nearest first, and marks them on the map with a dot. The walking time is the shortest walk to a point on a street that passes within 25 m of the building. Click an entry to show it with a tall pin.
-- **Residents.** The residents come from the 100 m cells of the Zensus 2022. For each cell that overlaps the area, its population is multiplied by the share of the cell's area that lies inside. These are added up and rounded to the nearest 10.
-- **Cells without a figure.** Some cells have no published resident count (`population` is `null`). They are not counted as zero: they are left out of the sum, and the panel shows how many of them overlap the area.
+The real forecast only reaches about 16 days ahead and the weather is rarely what you want to test. Add one of these to the page address to replace the forecast with a made-up day:
+
+| Address ending | Weather |
+| --- | --- |
+| `?weather=mildrain` | light rain, 13 °C |
+| `?weather=rain` | heavy rain (also the warning for far must-sees) |
+| `?weather=drywindow` | rain all day except one dry hour |
+| `?weather=clearing` | rain for two hours, then sun |
+| `?weather=clouding` | sun for two hours, then grey |
+| `?weather=mildsun` / `?weather=sun` | sunny, 19 / 21 °C |
+| `?weather=warm` / `?weather=hot` | sunny, 26 / 32 °C |
+| `?weather=cold` | grey, 1 °C |
+
+## How it works
+
+### The route
+
+- **Walking.** Everyone walks at 4.8 km/h (80 m a minute) on the pedestrian network in `streets.graph.json`. The walking time between every pair of places is the shortest walk along the network, plus the straight bit from each place to its nearest street.
+- **Must-sees first.** The start, the must-sees and the end are fixed first, in whichever order is shorter. If they alone take longer than your time, the app says so.
+- **Filling the time.** The rest of the time is filled from all places, not just those on the way. Each place scores by how well it fits the vibe (a good match counts about twenty times as much as none). The planner keeps adding the place worth most for the extra minutes it costs, at the point in the route where it costs least, until nothing more fits.
+- **No back and forth.** The order is then untangled (2-opt): whenever reversing a run of stops makes the walk shorter, it is reversed.
+- **Budget.** Entry for the whole group and the bus tickets (two each, if you come by bus) are counted as places are added. A place with a fee is only added while the money lasts; free places always may be. Bauhaus students are free everywhere.
+
+### Weather
+
+- **Forecast.** Hourly temperature, rain and weather type for Weimar come from the Open-Meteo forecast (no key needed), for the hours of your walk.
+- **Questions.** Rain, heat (25 °C, or 22 °C in summer), cold (8 °C, or 12 °C in winter), a mild sunny day or weather that changes during the walk each lead to one question. A street preference chosen in step 2 answers the street question in advance.
+- **Sun and shade.** For each hour of the walk the app works out where the sun is, then casts shadows from the 3D buildings onto sample points every 8 m along every street. A street's shade is the share of its points in shadow, averaged over the hours. Parks and cemeteries count as tree shade.
+- **Sheltered streets.** Points within 6 m of a building at least 6 m tall count as "along facades".
+- **Preferring streets.** A street with none of what you asked for counts as up to three times as long when the way is chosen, so preferred streets win unless the detour is large. The minutes shown are still the real walking time. The itinerary reports the share of your walk in shade, in sun or along facades, and what the shortest ways would have given.
+- **Changing weather.** If you choose to, the stops are reordered so that outdoor visits fall in the better hours, within your time. If the day is full, one indoor stop of little value may be left out to make room; the itinerary names it.
+- **Dry window.** On a rainy day with a dry hour, outdoor places are kept back, and the app offers one that fits your vibe and can be visited in that hour.
+
+### The map
+
+- **Dark Bauhaus.** Buildings are drawn to their measured height and coloured by their main use. With a route, buildings within 30 m of it keep most of their colour and the rest fade; route landmarks glow red (Classic), blue (Modern) or yellow (Nature); every stop has a ring in its vibe colour.
+- **Trees.** About a thousand schematic low-poly trees stand in the parks and cemeteries, on a jittered grid, off the paths and out of buildings.
+- **Time-lapse.** Fiona's position comes from the route's times: between two stops she moves along the walked streets at an even pace; at a stop she stands still for its visit time. The observer camera stays locked on her at a 70° tilt and turns with her walking direction, smoothed so it does not jerk.
+
+### Walk reach
+
+The older tool, under **Walk reach**: click on the ground and the app walks along the network from the nearest junction. It draws the streets reached in 5, 10 and 15 minutes with a band of 25 m on each side, highlights the buildings that touch each area, lists buildings with shop floor area within 5 minutes, and estimates the residents from the 100 m cells of the Zensus 2022 (each cell's population times the share of the cell inside the area, rounded to 10; cells without a published figure are left out and counted).
 
 ## Limits
 
-- The walk starts at the nearest junction or dead end, not at the exact point you clicked. The way from the click to that node is not counted.
-- Everyone walks at the same speed. Slopes, steps, crossings, waiting at lights and opening hours are ignored, and so are paths outside the kit's network.
-- The 25 m band is a convention for "close to the street". It doesn't mean that every building inside the band has an entrance on that street.
-- Residents are spread evenly over each 100 m cell, so the counts are estimates. The census also changes small counts slightly at random to protect privacy. Treat the numbers as "about", which is why they are rounded to 10.
-- Near the edge of the kit the network stops, so areas there are cut short.
-- The data has no individual shops: no names, kinds of shop or opening hours. The list shows buildings with estimated shop floor area, so one entry can be several shops, and a shop counted as `food_and_drink` (a café, say) is not in the list.
-- The one building without any use is shown as "use unknown".
+- **Places, prices and visit times are estimates.** The city kit has no named sights, so `public/data/places.json` was written by hand: 19 places, 8 stations and stops, approximate positions, estimated prices, visit times and vibe scores. Check them before relying on them. Opening hours are not included.
+- **Only the kit area.** The network covers central Weimar west of and including the Markt. Most of Park an der Ilm is outside it, so only its west entrance is used; sights further out are missing.
+- **Glowing buildings.** Only 6 landmarks are matched to their building (Goethe's house, City Palace, Bauhaus Museum, Bauhaus-Universität main building, National Theatre, Herder Church). The matches are likely but not checked on site; other stops are marked by their ring.
+- **Shade is a model.** Shadows come from the building blocks only: no trees (parks stand in for them), no awnings or arcades, no weather. The sun is taken once per hour.
+- **The trees are not real trees.** There is no tree data; they show where green space is, not where trees stand.
+- **Weather.** The forecast reaches about 16 days ahead; beyond that the weather is not checked. Rain on the map follows the forecast hour by hour, not minute by minute.
+- **Walking.** Everyone walks at the same even speed; slopes, steps, crossings and waiting at lights are ignored, and so are paths outside the network.
+- **Fiona is about 14 m tall,** so she can be seen from above. She is drawn over the buildings, like a navigation arrow.
+- **Walk reach:** the walk starts at the nearest junction, not the exact click; residents are spread evenly over each census cell, and the census changes small counts slightly at random, so the numbers are "about".
 
 ## Data
 
-All data is in `public/data/`; see `public/data/SOURCES.md` for every file, field and unit. The app loads nothing from the internet.
+The city kit is in `public/data/`; see `public/data/SOURCES.md` for every file, field and unit. The only thing loaded from the internet is the weather forecast.
 
-| File | Source | Licence |
+| File or service | Source | Licence |
 | --- | --- | --- |
 | `buildings.geojson` | footprints and heights: 3D building models LoD2 of Thuringia, © GDI-Th; uses: Egor Gaydukov | dl-de/by-2-0 |
+| `plots.geojson` | land use per plot: Egor Gaydukov | |
 | `streets.graph.json` | pedestrian network: Egor Gaydukov, InfAU, Bauhaus-Universität Weimar | |
 | `zensus.geojson` | Zensus 2022, 100 m grid, © Statistische Ämter des Bundes und der Länder | dl-de/by-2-0 |
+| `places.json` | written by hand for this app; estimates | |
+| Weather | [Open-Meteo](https://open-meteo.com/) forecast API | CC BY 4.0 |
 
-Buildings: 3D building models LoD2 © GDI-Th (dl-de/by-2-0). Land use and pedestrian network: Egor Gaydukov, InfAU, Bauhaus-Universität Weimar. Census grid: Zensus 2022, © Statistische Ämter des Bundes und der Länder (dl-de/by-2-0).
+Buildings: 3D building models LoD2 © GDI-Th (dl-de/by-2-0). Land use and pedestrian network: Egor Gaydukov, InfAU, Bauhaus-Universität Weimar. Census grid: Zensus 2022, © Statistische Ämter des Bundes und der Länder (dl-de/by-2-0). Weather data by Open-Meteo.com (CC BY 4.0).
 
 ## How this was made
 
 1. Tools: Claude Code, with the model Claude Opus 5.5.
 2. I decided:
-3. The agent did: read the city kit, then wrote the 3D map, the walking and resident calculation, and this README, and tested them in a headless browser, both on localhost and under a GitHub Pages sub-path.
+3. The agent did: read the city kit, then wrote the 3D map and the walk-reach tool; then, step by step from my briefs, the route planner and wizard, the hand-written places file, the weather features (forecast, questions, sun and shade, sheltered streets, dry window, reordering), the dark Bauhaus design, the time-lapse with Fiona and the two cameras, the trees and the route focus, and this README. It tested each step in a browser, on localhost and on the published site.
 4. I checked:
