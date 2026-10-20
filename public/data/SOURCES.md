@@ -94,3 +94,17 @@ How to read it:
 ## `kit.json`
 
 The kit area: `label`, `center` as `[lon, lat]`, `bbox` as `[west, south, east, north]`, `size_m` as `[width, height]`, and `generated`.
+
+## `places.json`
+
+Not part of the generated kit: written by hand for the route planner on 2026-10-20, and fine to edit by hand.
+
+- `places`: 19 sights inside the kit area, each with a position, a score from 0 to 1 for each vibe (`classic`, `modern`, `nature`), `visit_min`, `indoor`, `extra_walk_min` (walking inside the place, such as a park), `price` in € for `bauhaus` students, other `student`s and `adult`s, and its nearest `bus_stop`.
+- `bus_stops`: Weimar Hauptbahnhof and 7 bus stops. Together with the landmarks, they are the choices for the start and end point of a walk.
+- `transit`: the bus ticket per visitor type, and how many trips are counted.
+
+Positions are approximate, to within a few tens of metres. **Prices, visit times, vibe scores and stop names are estimates, not checked against the operators. Check them before you rely on them.** Opening hours are not included. Bauhaus students are counted as free everywhere. Park an der Ilm lies mostly outside the kit area; only its west entrance is used.
+
+For the map, some places also have `short` (the label on the map), `landmark` (show a floating label in the route tab) and `building` (the `id` in `buildings.geojson` that glows). The building was matched by position, use and size: Goethe's house 16903, City Palace 20335, Bauhaus Museum 45121, Bauhaus-Universität main building 14780, National Theatre 24976, Herder Church 19706. These matches are likely but not checked on site. The other landmarks have no confident match, so they get a label but no glow.
+
+The green on the map is the `recreation` and `cemetery` plots of `plots.geojson`.

@@ -1,0 +1,43 @@
+{
+  "note": "Hand-written for the route planner. Positions are approximate; prices, visit times and stops are estimates to check before use. See SOURCES.md.",
+  "bus_stops": [
+    { "id": "hbf", "name": "Weimar Hauptbahnhof", "lon": 11.3267, "lat": 50.9905 },
+    { "id": "goetheplatz", "name": "Goetheplatz", "lon": 11.3254, "lat": 50.9812 },
+    { "id": "wielandplatz", "name": "Wielandplatz", "lon": 11.3284, "lat": 50.9766 },
+    { "id": "sophienstiftsplatz", "name": "Sophienstiftsplatz", "lon": 11.3252, "lat": 50.9786 },
+    { "id": "weimarhalle", "name": "Weimarhalle", "lon": 11.3228, "lat": 50.9838 },
+    { "id": "bauhausmuseum", "name": "Bauhaus-Museum", "lon": 11.3236, "lat": 50.9853 },
+    { "id": "demokratie", "name": "Platz der Demokratie", "lon": 11.3322, "lat": 50.9779 },
+    { "id": "posecker", "name": "Am Poseckschen Garten", "lon": 11.3262, "lat": 50.9746 }
+  ],
+  "transit": {
+    "label": "bus ticket, to the start and back",
+    "trips": 2,
+    "price": {
+      "bauhaus": 0,
+      "student": 2.6,
+      "adult": 2.6
+    }
+  },
+  "places": [
+    { "id": "goethe", "name": "Goethe's house (Goethe-Nationalmuseum)", "lon": 11.3291, "lat": 50.9775, "vibes": { "classic": 1, "modern": 0, "nature": 0.2 }, "visit_min": 90, "indoor": true, "extra_walk_min": 0, "price": { "bauhaus": 0, "student": 9.5, "adult": 13.5 }, "bus_stop": "wielandplatz", "short": "Goethe's house", "landmark": true, "building": "16903" },
+    { "id": "schiller", "name": "Schiller's house", "lon": 11.3268, "lat": 50.9786, "vibes": { "classic": 1, "modern": 0, "nature": 0 }, "visit_min": 50, "indoor": true, "extra_walk_min": 0, "price": { "bauhaus": 0, "student": 6, "adult": 8.5 }, "bus_stop": "sophienstiftsplatz", "short": "Schiller's house", "landmark": true },
+    { "id": "aab", "name": "Duchess Anna Amalia Library", "lon": 11.3326, "lat": 50.9772, "vibes": { "classic": 1, "modern": 0, "nature": 0 }, "visit_min": 40, "indoor": true, "extra_walk_min": 0, "price": { "bauhaus": 0, "student": 7, "adult": 9.5 }, "bus_stop": "demokratie", "short": "Anna Amalia Library", "landmark": true },
+    { "id": "schloss", "name": "City Palace (Stadtschloss)", "lon": 11.3328, "lat": 50.9806, "vibes": { "classic": 0.9, "modern": 0, "nature": 0.1 }, "visit_min": 60, "indoor": true, "extra_walk_min": 0, "price": { "bauhaus": 0, "student": 6, "adult": 8.5 }, "bus_stop": "demokratie", "short": "City Palace", "landmark": true, "building": "20335" },
+    { "id": "markt", "name": "Markt", "lon": 11.3297, "lat": 50.9794, "vibes": { "classic": 0.7, "modern": 0.1, "nature": 0 }, "visit_min": 15, "indoor": false, "extra_walk_min": 0, "price": { "bauhaus": 0, "student": 0, "adult": 0 }, "bus_stop": "goetheplatz", "short": "Markt", "landmark": true },
+    { "id": "theaterplatz", "name": "Theaterplatz, Goethe–Schiller monument", "lon": 11.3261, "lat": 50.98, "vibes": { "classic": 0.8, "modern": 0.2, "nature": 0 }, "visit_min": 10, "indoor": false, "extra_walk_min": 0, "price": { "bauhaus": 0, "student": 0, "adult": 0 }, "bus_stop": "goetheplatz", "short": "National Theatre", "landmark": true, "building": "24976" },
+    { "id": "wittumspalais", "name": "Wittumspalais", "lon": 11.327, "lat": 50.9803, "vibes": { "classic": 0.9, "modern": 0, "nature": 0 }, "visit_min": 45, "indoor": true, "extra_walk_min": 0, "price": { "bauhaus": 0, "student": 5.5, "adult": 7.5 }, "bus_stop": "goetheplatz" },
+    { "id": "herderkirche", "name": "Herder Church (St. Peter und Paul)", "lon": 11.3296, "lat": 50.9813, "vibes": { "classic": 0.8, "modern": 0, "nature": 0 }, "visit_min": 20, "indoor": true, "extra_walk_min": 0, "price": { "bauhaus": 0, "student": 0, "adult": 0 }, "bus_stop": "goetheplatz", "short": "Herder Church", "landmark": true, "building": "19706" },
+    { "id": "kirms", "name": "Kirms-Krackow House and garden", "lon": 11.3296, "lat": 50.9829, "vibes": { "classic": 0.7, "modern": 0, "nature": 0.4 }, "visit_min": 30, "indoor": true, "extra_walk_min": 0, "price": { "bauhaus": 0, "student": 3, "adult": 4 }, "bus_stop": "goetheplatz" },
+    { "id": "stadtmuseum", "name": "City Museum (Bertuchhaus)", "lon": 11.3276, "lat": 50.9829, "vibes": { "classic": 0.6, "modern": 0.3, "nature": 0 }, "visit_min": 45, "indoor": true, "extra_walk_min": 0, "price": { "bauhaus": 0, "student": 3.5, "adult": 6 }, "bus_stop": "goetheplatz" },
+    { "id": "liszt", "name": "Liszt House", "lon": 11.3318, "lat": 50.9752, "vibes": { "classic": 0.8, "modern": 0, "nature": 0.3 }, "visit_min": 40, "indoor": true, "extra_walk_min": 0, "price": { "bauhaus": 0, "student": 4.5, "adult": 6 }, "bus_stop": "demokratie" },
+    { "id": "bauhausmuseum", "name": "Bauhaus Museum Weimar", "lon": 11.3243, "lat": 50.9848, "vibes": { "classic": 0, "modern": 1, "nature": 0 }, "visit_min": 75, "indoor": true, "extra_walk_min": 0, "price": { "bauhaus": 0, "student": 8, "adult": 11.5 }, "bus_stop": "bauhausmuseum", "short": "Bauhaus Museum", "landmark": true, "building": "45121" },
+    { "id": "neuesweimar", "name": "Museum Neues Weimar", "lon": 11.3254, "lat": 50.9858, "vibes": { "classic": 0.2, "modern": 0.9, "nature": 0 }, "visit_min": 60, "indoor": true, "extra_walk_min": 0, "price": { "bauhaus": 0, "student": 6, "adult": 8.5 }, "bus_stop": "bauhausmuseum", "short": "Neues Weimar", "landmark": true },
+    { "id": "zwangsarbeit", "name": "Museum of Forced Labour (former Gauforum)", "lon": 11.3226, "lat": 50.9862, "vibes": { "classic": 0, "modern": 0.6, "nature": 0 }, "visit_min": 60, "indoor": true, "extra_walk_min": 0, "price": { "bauhaus": 0, "student": 0, "adult": 0 }, "bus_stop": "bauhausmuseum" },
+    { "id": "vandevelde", "name": "Bauhaus-Universität main building (van de Velde)", "lon": 11.3293, "lat": 50.9746, "vibes": { "classic": 0.1, "modern": 1, "nature": 0 }, "visit_min": 30, "indoor": false, "extra_walk_min": 0, "price": { "bauhaus": 0, "student": 0, "adult": 0 }, "bus_stop": "posecker", "short": "Bauhaus-Uni", "landmark": true, "building": "14780" },
+    { "id": "weimarhallenpark", "name": "Weimarhallenpark", "lon": 11.3213, "lat": 50.983, "vibes": { "classic": 0, "modern": 0.2, "nature": 1 }, "visit_min": 30, "indoor": false, "extra_walk_min": 4, "price": { "bauhaus": 0, "student": 0, "adult": 0 }, "bus_stop": "weimarhalle", "short": "Weimarhallenpark", "landmark": true },
+    { "id": "ilmpark", "name": "Park an der Ilm (west entrance)", "lon": 11.3336, "lat": 50.9768, "vibes": { "classic": 0.4, "modern": 0, "nature": 1 }, "visit_min": 60, "indoor": false, "extra_walk_min": 12, "price": { "bauhaus": 0, "student": 0, "adult": 0 }, "bus_stop": "demokratie", "short": "Park an der Ilm", "landmark": true },
+    { "id": "jakobsfriedhof", "name": "Jacob's Cemetery (Jakobsfriedhof)", "lon": 11.3282, "lat": 50.9846, "vibes": { "classic": 0.6, "modern": 0, "nature": 0.6 }, "visit_min": 20, "indoor": false, "extra_walk_min": 2, "price": { "bauhaus": 0, "student": 0, "adult": 0 }, "bus_stop": "goetheplatz" },
+    { "id": "goetheplatz_sq", "name": "Goetheplatz and Rollplatz greens", "lon": 11.3262, "lat": 50.9822, "vibes": { "classic": 0.1, "modern": 0.1, "nature": 0.5 }, "visit_min": 10, "indoor": false, "extra_walk_min": 0, "price": { "bauhaus": 0, "student": 0, "adult": 0 }, "bus_stop": "goetheplatz" }
+  ]
+}
